@@ -1,0 +1,10 @@
+Calculadora capaz de um número não fixo de operandos, operações +,-,* e / e utilização de parenteses ()
+
+1. Pegar entrada de usuário (fgets) e remover caracter newline 1º
+2. Verificar que entrada não possui caracteres inválidos (whitelisting) 2º
+3. Repetir até obter resultado final
+    3.1 Identificar parenteses de maior grau
+    3.2 Resolver equação dentro de parenteses de maior grau
+        3.1.1 Resolver multiplicações e divisões, coletando
+    3.3 Substituir resultado dentro da equação original
+
