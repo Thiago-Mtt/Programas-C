@@ -34,10 +34,17 @@ char entrada[MAX_DIG_ENTR+1];
 
 int main()
 {
-    fgets(entrada, MAX_DIG_ENTR, stdin);
-    printf("%s", entrada);
+    //Acentos e 'ç' não reconhecidos
+    printf("Calculadora Basica {+, -, *, /, ()}");
 
-    if(entrada[strlen(entrada)-1] == '\n');
+    while (1){
+        printf("\nInserir equacaoo: ");
+
+        fgets(entrada, MAX_DIG_ENTR, stdin);
+        printf("%s", entrada);
+
+        if(entrada[strlen(entrada)-1] == '\n');
+    }
 
 
     return (0);
