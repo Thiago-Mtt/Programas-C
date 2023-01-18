@@ -31,6 +31,8 @@ Algoritmo do programa
 
 char entrada[MAX_DIG_ENTR+1];
 
+const char white_list[] = "0123456789+-/* ()";
+
 
 int main()
 {
@@ -38,12 +40,25 @@ int main()
     printf("Calculadora Basica {+, -, *, /, ()}");
 
     while (1){
-        printf("\nInserir equacaoo: ");
+        printf("\nInserir equacao: ");
 
         fgets(entrada, MAX_DIG_ENTR, stdin);
-        printf("%s", entrada);
 
-        if(entrada[strlen(entrada)-1] == '\n');
+        //Remoção de caracter newline '\n'
+        if(entrada[strlen(entrada)-1] == '\n') entrada[strlen(entrada)-1] = '\0';
+        
+        //Verificação de entrada inválida
+        //Caractere inválido:
+        if (strspn(entrada, white_list) != strlen(entrada)){
+            printf("Caractere inválido na entrada.\n"
+            "Entrada deve consistir somente dos seguintes caracteres:\n0123456789+-/* ()\n");
+            continue;
+        }
+
+        
+
+       
+        
     }
 
 
