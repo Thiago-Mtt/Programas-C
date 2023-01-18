@@ -43,13 +43,17 @@ int main()
         printf("\nInserir equacao: ");
 
         fgets(entrada, MAX_DIG_ENTR, stdin);
+        int len = strlen(entrada);
 
         //Remoção de caracter newline '\n'
-        if(entrada[strlen(entrada)-1] == '\n') entrada[strlen(entrada)-1] = '\0';
-        
+        if(entrada[len-1] == '\n'){
+        entrada[len-1] = '\0';
+        len -= 1;
+        }
+
         //Verificação de entrada inválida
-        //Caractere inválido:
-        if (strspn(entrada, white_list) != strlen(entrada)){
+        //1.Caractere inválido:
+        if (strspn(entrada, white_list) != len){
             printf("Caractere inválido na entrada.\n"
             "Entrada deve consistir somente dos seguintes caracteres:\n0123456789+-/* ()\n");
             continue;
