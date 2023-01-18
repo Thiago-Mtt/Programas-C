@@ -59,6 +59,22 @@ int main()
             continue;
         }
 
+        //2.Parênteses não fechado
+        int paren = 0; int err = 0;
+        for (int i = 0; i < len; i++){
+            if (entrada[i] == '(') paren++;
+            if(entrada[i] == ')') paren--;
+
+            if (paren < 0){ // ')' sem um '(' anterior
+                err = 1;
+                break;
+            }
+        }
+        if (paren != 0 || err == 1){
+            printf("Parênteses não fechado na entrada");
+            continue;
+        }
+
         
 
        
