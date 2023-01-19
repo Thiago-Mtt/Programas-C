@@ -45,11 +45,27 @@ int main()
         fgets(entrada, MAX_DIG_ENTR, stdin);
         int len = strlen(entrada);
 
-        //Remoção de caracter newline '\n'
+        //Simplificação (sanitização) da entrada
+        //1.Remoção de caracter newline '\n'
         if(entrada[len-1] == '\n'){
         entrada[len-1] = '\0';
         len -= 1;
         }
+
+        //2.Simplificação de múltiplos sinais de soma/subtração consecutivos
+        for (int i = 0; i < len; i++){
+            if (entrada[i] == entrada[i+1] && (entrada[i]=='+' || entrada[i]=='-')){
+                entrada[i] = ' ';
+                entrada[i+1] = '+';
+            }
+            if ((entrada[i] == '+' && entrada[i+1]=='-')|| (entrada[i] == '-' && entrada[i+1]=='+')){
+                entrada [i] = ' ';
+                entrada[i+1] = '-';
+            }
+        }
+        printf("Entrada pós simplificação de +-: %s\n", entrada);
+
+        //3.Remoção de espaço ' '
 
         //Verificação de entrada inválida
         //1.Caractere inválido:
