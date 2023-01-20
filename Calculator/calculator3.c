@@ -33,7 +33,7 @@ Algoritmo do programa
 
 char entrada[MAX_DIG_ENTR+1];
 
-const char white_list[] = "0123456789+-/* ()";
+const char white_list[] = "0123456789+-/* ().";
 const char white_list_numeros[] = "0123456789";
 
 
@@ -126,6 +126,7 @@ int main()
         //3.Operação inválida
         //3.1.Múltiplos sinais de multiplicação/divisão consecutivos
         //3.2.Sinais de soma/subtração não seguidos de um número
+        //3.3.Ponto não entre números
         err = 0;
         for (int i=0; i < len; i++){
             if((entrada[i] == '*' || entrada[i] == '/') && (entrada[i+1] == '*' || entrada[i+1] == '/')){
@@ -135,11 +136,17 @@ int main()
             }
             //Aponta um erro caso tenham múltiplos sinais de soma/subtração consecutivos
             //Entrada deve ser simplificado anteriormente a esta verificação
-            //if (!strchr(white_list_numeros, entrada[i+1])) printf("Verdadeiro");
             if((entrada[i] == '+' || entrada[i] == '-') && (!strchr(white_list_numeros, entrada[i+1]) || i == (len-1))){
                 printf("Erro: Operação inválida, sinal de soma/subtração não seguido de um número\n");
                 err = 1;
                 break;
+            }
+
+            if(entrada[i] == '.') printf("Verdadeiro\n");
+            if(entrada[i] == '.' && (!strchr(white_list_numeros, entrada[i-1]) || !strchr(white_list_numeros, entrada[i+1]))){
+                printf("Erro: Operação inválida, o caractere '.' deve ser antecedido e seguido por um número\n");
+                err = 1;
+                break; 
             }
 
         }
