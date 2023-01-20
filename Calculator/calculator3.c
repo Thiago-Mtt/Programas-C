@@ -8,11 +8,13 @@ Algoritmo do programa
     Apresentação do programa
     Loop
         Recebimento e sanitização de entrada
-            Erro em caso de 
-              Caractere inválido
-              Parênteses não fechado
-              Operação inválida (Ex: +*-2)
+            Remoção do caracter new line '\n' no fim da entrada se houver
+            Simplificação de múltiplos sinais de soma/subtração
             Eliminação de Espaços
+        Erro em caso de 
+            Caractere inválido
+            Parênteses não fechado
+            Operação inválida (Ex: +*-2)
         Enquanto houver parenteses: 
             Obter equação entre parênteses mais profundo (que não possui parênteses entre parênteses)
             Resolver multiplicação e divisão
