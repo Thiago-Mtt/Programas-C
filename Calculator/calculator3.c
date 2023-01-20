@@ -74,7 +74,6 @@ int main()
         p_ponto_de_anexo = (strchr(entrada, ' '));
         if (p_ponto_de_anexo){
             int tamanho_principal_inicial = len - strlen(p_ponto_de_anexo);
-            printf("Tamanho_principal_inicial = %d\n", tamanho_principal_inicial);
             int tamanho_anexo = 0;
             int anexo = 0;
             for (int i = tamanho_principal_inicial; i <= len; i++){
@@ -82,23 +81,19 @@ int main()
                     anexo = 1;
                     p_anexo = (entrada) + i;
                     tamanho_anexo++;
-                    printf("Anexo = 1 em %d\n", i);
                 }
                 else if (anexo == 1 && (entrada[i] != ' ' && i != len)) {
                     tamanho_anexo++;
-                    printf("Tamanho anexo incrementado\n", i);
                 }
                 else if (anexo == 1 && (entrada[i] == ' ' || i == len)){
                     memcpy(p_ponto_de_anexo, p_anexo, tamanho_anexo);
                     p_ponto_de_anexo += tamanho_anexo;
                     anexo = 0;
                     tamanho_anexo = 0;
-                    printf("Anexo = 0 em %d\n", i);
                 }
             }
             memset(p_ponto_de_anexo, '\0', strlen(p_ponto_de_anexo));
             len = strlen(entrada);
-            printf("Entrada pós remoção de expaço: %s\n", entrada);
         }
 
         
@@ -107,7 +102,7 @@ int main()
         //Verificação de entrada inválida
         //1.Caractere inválido:
         if (strspn(entrada, white_list) != len){
-            printf("Caractere inválido na entrada.\n"
+            printf("Erro: Caractere inválido na entrada.\n"
             "Entrada deve consistir somente dos seguintes caracteres:\n0123456789+-/* ()\n");
             continue;
         }
@@ -124,7 +119,7 @@ int main()
             }
         }
         if (paren != 0 || err == 1){
-            printf("Parênteses não fechado na entrada");
+            printf("Erro: Parênteses não fechado na entrada");
             continue;
         }
 
