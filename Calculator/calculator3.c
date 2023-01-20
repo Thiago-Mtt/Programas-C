@@ -135,7 +135,8 @@ int main()
             }
             //Aponta um erro caso tenham múltiplos sinais de soma/subtração consecutivos
             //Entrada deve ser simplificado anteriormente a esta verificação
-            if((entrada[i] == '+' || entrada[i] == '-') && (!strchr(white_list_numeros, entrada[i+1]))){
+            //if (!strchr(white_list_numeros, entrada[i+1])) printf("Verdadeiro");
+            if((entrada[i] == '+' || entrada[i] == '-') && (!strchr(white_list_numeros, entrada[i+1]) || i == (len-1))){
                 printf("Erro: Operação inválida, sinal de soma/subtração não seguido de um número\n");
                 err = 1;
                 break;
