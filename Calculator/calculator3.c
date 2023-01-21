@@ -127,6 +127,7 @@ int main()
         //3.1.Múltiplos sinais de multiplicação/divisão consecutivos
         //3.2.Sinais de soma/subtração não seguidos de um número
         //3.3.Ponto não entre números
+        //3.4.Parênteses vazio
         err = 0;
         for (int i=0; i < len; i++){
             if((entrada[i] == '*' || entrada[i] == '/') && (entrada[i+1] == '*' || entrada[i+1] == '/')){
@@ -149,12 +150,17 @@ int main()
                 break; 
             }
 
+            if(entrada[i] == '(' && entrada[i] == ')'){
+                printf("Erro: Operação inválida, não deve haver parênteses vazio na entrada\n");
+                err = 1;
+                break;
+            }
+
         }
 
         if (err) continue;
 
-
-       printf("Entrada limpa: %s\n", entrada);
+        
         
     }
 
