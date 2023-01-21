@@ -36,6 +36,8 @@ char entrada[MAX_DIG_ENTR+1];
 const char white_list[] = "0123456789+-/* ().";
 const char white_list_numeros[] = "0123456789";
 
+void resolverEquacao(char equacao[], int eq_len);   
+
 
 int main()
 {
@@ -160,10 +162,28 @@ int main()
 
         if (err) continue;
 
-        
-        
+
+        //Obtenção de equação dentro de parênteses, se houver
+        int par1,par2;
+        char *p_equação_paren;
+        for (int i = 0; i < len; i++){
+            if(entrada[i] == '(') par1 = i+1;
+            if(entrada[i] == ')'){
+                par2 = i-par1;
+                p_equação_paren = (entrada)+par1;
+                resolverEquacao(p_equação_paren, par2);
+                entrada[par1-1] = ' ';
+                entrada[par2+par1] = ' ';
+                break;
+            } 
+        }
     }
 
 
     return (0);
+}
+
+
+void resolverEquacao(char equacao[], int eq_len){
+
 }
