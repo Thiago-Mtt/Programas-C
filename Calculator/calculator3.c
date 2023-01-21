@@ -9,8 +9,8 @@ Algoritmo do programa
     Loop
         Recebimento e sanitização de entrada
             Remoção do caracter new line '\n' no fim da entrada se houver
-            Simplificação de múltiplos sinais de soma/subtração
             Eliminação de Espaços
+            Simplificação de múltiplos sinais de soma/subtração
         Erro em caso de 
             Caractere inválido
             Parênteses não fechado
@@ -57,20 +57,7 @@ int main()
         len -= 1;
         }
 
-        //2.Simplificação de múltiplos sinais de soma/subtração consecutivos
-        for (int i = 0; i < len; i++){
-            if (entrada[i] == entrada[i+1] && (entrada[i]=='+' || entrada[i]=='-')){
-                entrada[i] = ' ';
-                entrada[i+1] = '+';
-            }
-            if ((entrada[i] == '+' && entrada[i+1]=='-')|| (entrada[i] == '-' && entrada[i+1]=='+')){
-                entrada [i] = ' ';
-                entrada[i+1] = '-';
-            }
-        }
-
-
-        //3.Remoção de espaço ' '
+        //2.Remoção de espaço ' '
         char *p_ponto_de_anexo = entrada;
         char *p_anexo = entrada;
         p_ponto_de_anexo = (strchr(entrada, ' '));
@@ -97,6 +84,19 @@ int main()
             memset(p_ponto_de_anexo, '\0', strlen(p_ponto_de_anexo));
             len = strlen(entrada);
         }
+
+        //3.Simplificação de múltiplos sinais de soma/subtração consecutivos
+        for (int i = 0; i < len; i++){
+            if (entrada[i] == entrada[i+1] && (entrada[i]=='+' || entrada[i]=='-')){
+                entrada[i] = ' ';
+                entrada[i+1] = '+';
+            }
+            if ((entrada[i] == '+' && entrada[i+1]=='-')|| (entrada[i] == '-' && entrada[i+1]=='+')){
+                entrada [i] = ' ';
+                entrada[i+1] = '-';
+            }
+        }
+
 
         
         
