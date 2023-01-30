@@ -30,6 +30,8 @@ char entrada[MAX_DIG_ENTR+1];
 
 const char white_list[] = "0123456789+-/* ().";
 const char white_list_numeros[] = "0123456789";
+const char white_list_multdiv_esquerda[] = "0123456789)";
+const char white_list_multdiv_direita[] = "0123456789+-(";
 
 double resolverEquacao(char *p_equacao);
 double f_strtod(char *p_equacao,char **p_p_equacao);
@@ -123,17 +125,19 @@ int main()
         }
 
         //3.Operação inválida
-        //3.1.Múltiplos sinais de multiplicação/divisão consecutivos
+        //3.1.Sinais de multiplicação/divisão 
         //3.2.Sinais de soma/subtração não seguidos de um número
         //3.3.Ponto não entre números
         //3.4.Parênteses vazio
         err = 0;
         for (int i=0; i < len; i++){
-            if((entrada[i] == '*' || entrada[i] == '/') && (entrada[i+1] == '*' || entrada[i+1] == '/')){
-                printf("Erro: Operação inválida, sinais de multiplicacao/divisao consecutivos\n");
+            if((entrada[i] == '*' || entrada[i] == '/') && (!strchr(white_list_multdiv_esquerda,entrada[i-1]) || 
+            !strchr(white_list_multdiv_direita,entrada[i+1]) || i == 0 || i == len-1)){
+                printf("Erro: Operação inválida, operação de multiplicação/divisão inválida\n");
                 err = 1;
                 break;
             }
+
             //Aponta um erro caso tenham múltiplos sinais de soma/subtração consecutivos
             //Entrada deve ser simplificado anteriormente a esta verificação
             if((entrada[i] == '+' || entrada[i] == '-') && (!strchr(white_list_numeros, entrada[i+1]) || i == (len-1))){
@@ -149,7 +153,7 @@ int main()
                 break; 
             }
 
-            if(entrada[i] == '(' && entrada[i] == ')'){
+            if(entrada[i] == '(' && entrada[i+1] == ')'){
                 printf("Erro: Operação inválida, não deve haver parênteses vazio na entrada\n");
                 err = 1;
                 break;
@@ -205,9 +209,6 @@ double resolverEquacao(char *p_equacao){
       if(p_equacao[0] == '+' || p_equacao[0] == '-' || iterator == -1){
          iterator++;
          num_vect[iterator] = f_strtod(p_equacao, &p_equacao);
-         printf("num_vect depois do retorno de f_strtod=%f\n", num_vect[iterator]);
-         printf("p_equacao apos o retorno = %s\n", p_equacao);
-         return 0;
       } 
 
       //Verifica se o ponteiro aponta para um sinal de multiplicação/divisão. Neste caso, realiza a operação do
@@ -243,11 +244,8 @@ double f_strtod(char *p_equacao, char **p_p_equacao){
       else return processarParenteses(p_equacao);
    }
    else{
-      printf("Sem parenteses\n");
       p_equacao--;
-      printf("p_equacao na função f_strtod = %s\n", p_equacao);
       double res = strtod(p_equacao, p_p_equacao);
-      printf("p_equacao na função f_strtod após strtod = %s\n", p_equacao);
       return res;
    }
    
