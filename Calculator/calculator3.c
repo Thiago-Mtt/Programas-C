@@ -15,14 +15,8 @@ Algoritmo do programa
             Caractere inválido
             Parênteses não fechado
             Operação inválida (Ex: +*-2)
-        Enquanto houver parenteses: 
-            Obter equação entre parênteses mais profundo (que não possui parênteses entre parênteses)
-            Resolver multiplicação e divisão
-            Resolver soma e subtração
-            Substituir resultado na entrada com operações de sinal apropriadas
-        Resolver equação final
-            Resolver multiplicação e divisão
-            Resolver soma e subtração
+        Resolver equação do começo ao fim da entrada
+            Aplicar recursividade em caso de parênteses
         Devolver resposta
     */
 
@@ -163,20 +157,7 @@ int main()
         if (err) continue;
 
 
-        //Obtenção de equação dentro de parênteses, se houver
-        int par1,par2;
-        char *p_equação_paren;
-        for (int i = 0; i < len; i++){
-            if(entrada[i] == '(') par1 = i+1;
-            if(entrada[i] == ')'){
-                par2 = i-par1;
-                p_equação_paren = (entrada)+par1;
-                resolverEquacao(p_equação_paren, par2);
-                entrada[par1-1] = ' ';
-                entrada[par2+par1] = ' ';
-                break;
-            } 
-        }
+
     }
 
 
