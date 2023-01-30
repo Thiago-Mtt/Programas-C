@@ -22,6 +22,7 @@ Algoritmo do programa
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define MAX_DIG_ENTR 32
 
@@ -30,7 +31,9 @@ char entrada[MAX_DIG_ENTR+1];
 const char white_list[] = "0123456789+-/* ().";
 const char white_list_numeros[] = "0123456789";
 
-void resolverEquacao(char equacao[], int eq_len);   
+double resolverEquacao(char *p_equacao);
+double f_strtod(char *p_equacao,char **p_p_equacao);
+double processarParenteses(char *p_equacao);
 
 
 int main()
@@ -156,7 +159,7 @@ int main()
 
         if (err) continue;
 
-
+        printf("Resultado = %f\n", resolverEquacao(entrada));
 
     }
 
@@ -165,6 +168,110 @@ int main()
 }
 
 
-void resolverEquacao(char equacao[], int eq_len){
+/*
+Função é resolvido coletando os números da entrada num vetor (num_vect)
+Em caso de soma/subtração, o número a ser somado/subtraido é adicionado ao vetor
+Em caso de multiplicação/divisão, a operação é realizada entre o último termo adicionado ao vetor
+e o próximo na entrada
+Em caso de parênteses, a função é chamada novamente para resolver a equação dentro do parênteses (recursivo)
+*/
 
+//Tamanho inicial do vetor usado para guardar os números da entrada.
+//Multiplicandos/Dividendos e Multiplicadores/Divisores são processados antes de entrarem no vetor
+int num_vect_tam_ini = 5;
+
+//Tamanho a ser incrementado ao vetor que guarda os números da entrada caso o espaço não seja o bastante
+int num_vect_tam_incr = 2; 
+
+double resolverEquacao(char *p_equacao){
+   double *num_vect, mult_div_or;
+   char *p_pntr, sinal;
+
+   num_vect = (double *) malloc(num_vect_tam_ini*sizeof(double));
+
+   //Iterador do vetor num_vect no while loop
+   int iterator = -1;
+   //Inteiro que guarda o espaço (em double) em num_vect
+   int num_vect_tam_atual = num_vect_tam_ini;
+
+   while(strlen(p_equacao) != 0){ 
+      printf("p_equacao =%s\n", p_equacao);
+      if(iterator == num_vect_tam_atual){
+         num_vect = (double*) realloc(num_vect, sizeof(double)* (num_vect_tam_atual+num_vect_tam_incr));
+         num_vect_tam_atual += num_vect_tam_incr;
+      }
+
+      //Verifica se ponteiro aponta para um valor a ser somado/subtraido. Se for um número, é o inicio da entrada.
+      if(p_equacao[0] == '+' || p_equacao[0] == '-' || iterator == -1){
+         iterator++;
+         num_vect[iterator] = f_strtod(p_equacao, &p_equacao);
+         printf("num_vect depois do retorno de f_strtod=%f\n", num_vect[iterator]);
+         printf("p_equacao apos o retorno = %s\n", p_equacao);
+         return 0;
+      } 
+
+      //Verifica se o ponteiro aponta para um sinal de multiplicação/divisão. Neste caso, realiza a operação do
+      //valor à direita com o último valor guardado no vetor num_vect, ou seja, o valor à esquerda do sinal.
+      else if(p_equacao[0] == '*' || p_equacao[0] == '/'){
+         sinal = p_equacao[0];
+         p_equacao++;
+         mult_div_or = f_strtod(p_equacao, &p_equacao);
+         if(sinal == '*') num_vect[iterator] = num_vect[iterator]*mult_div_or;
+         else if(sinal == '/') num_vect[iterator] = num_vect[iterator]/mult_div_or;
+      }
+
+   }
+
+   double res = 0;
+   for (int i = 0; i <= iterator; i++){
+      res += num_vect[i];
+   }
+
+   free(num_vect);
+
+   return res;
+}
+
+//Verifica se o termo a ser somado/subtraido ou multiplicado/dividido está envolto de parênteses
+//Se estiver, a equação é enviada para a função resolverEquacao
+double f_strtod(char *p_equacao, char **p_p_equacao){
+   if(p_equacao[0] == '(') return processarParenteses(p_equacao);
+   else p_equacao++;
+
+   if(p_equacao[0] == '('){
+      if(p_equacao[-1] == '-') return -1*processarParenteses(p_equacao);
+      else return processarParenteses(p_equacao);
+   }
+   else{
+      printf("Sem parenteses\n");
+      p_equacao--;
+      printf("p_equacao na função f_strtod = %s\n", p_equacao);
+      double res = strtod(p_equacao, p_p_equacao);
+      printf("p_equacao na função f_strtod após strtod = %s\n", p_equacao);
+      return res;
+   }
+   
+   
+   
+}
+
+double processarParenteses(char *p_equacao){
+   p_equacao++;
+   int paren = 1;
+   int len;
+   double res;
+   for(int i = 0; i < strlen(p_equacao); i++){
+      if(p_equacao[i] == ')') paren--;
+      if(p_equacao[i] == '(') paren++;
+      if(paren == 0) {
+         len = i;
+         break;
+      }
+      char equacao_paren[i+1];
+      memcpy(equacao_paren, p_equacao, len);
+      printf("Equação dentro de parenteses = %s\n", equacao_paren);
+      p_equacao += i;
+      printf("p_equacao após parenteses = %s\n", p_equacao);
+   }
+   return 0;
 }
