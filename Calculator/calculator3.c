@@ -35,7 +35,7 @@ const char white_list_multdiv_direita[] = "0123456789+-(";
 
 double resolverEquacao(char *p_equacao);
 double f_strtod(char *p_equacao,char **p_p_equacao);
-double processarParenteses(char *p_equacao);
+double processarParenteses(char *p_equacao, char **p_p_equacao);
 
 
 int main()
@@ -125,7 +125,7 @@ int main()
         }
 
         //3.Operação inválida
-        //3.1.Sinais de multiplicação/divisão 
+        //3.1.Sinais de multiplicação/divisão em posições inválidas
         //3.2.Sinais de soma/subtração não seguidos de um número
         //3.3.Ponto não entre números
         //3.4.Parênteses vazio
@@ -173,7 +173,7 @@ int main()
 
 
 /*
-Função é resolvido coletando os números da entrada num vetor (num_vect)
+Função é resolvida coletando os números da entrada num vetor (num_vect)
 Em caso de soma/subtração, o número a ser somado/subtraido é adicionado ao vetor
 Em caso de multiplicação/divisão, a operação é realizada entre o último termo adicionado ao vetor
 e o próximo na entrada
@@ -220,6 +220,12 @@ double resolverEquacao(char *p_equacao){
          if(sinal == '*') num_vect[iterator] = num_vect[iterator]*mult_div_or;
          else if(sinal == '/') num_vect[iterator] = num_vect[iterator]/mult_div_or;
       }
+      else{
+        printf("Erro no programa\n");
+        printf("p_equacao[0] não é um sinal +-*/, p_equacao = %s\n", p_equacao);
+        return 0;
+
+      } 
 
    }
 
@@ -236,40 +242,38 @@ double resolverEquacao(char *p_equacao){
 //Verifica se o termo a ser somado/subtraido ou multiplicado/dividido está envolto de parênteses
 //Se estiver, a equação é enviada para a função resolverEquacao
 double f_strtod(char *p_equacao, char **p_p_equacao){
-   if(p_equacao[0] == '(') return processarParenteses(p_equacao);
-   else p_equacao++;
-
-   if(p_equacao[0] == '('){
-      if(p_equacao[-1] == '-') return -1*processarParenteses(p_equacao);
-      else return processarParenteses(p_equacao);
-   }
-   else{
-      p_equacao--;
-      double res = strtod(p_equacao, p_p_equacao);
-      return res;
-   }
+    if(p_equacao[0] == '(') return processarParenteses(p_equacao, p_p_equacao);
+    else if(p_equacao[1] == '('){
+        p_equacao++;
+        if(p_equacao[-1] == '-') return -1*processarParenteses(p_equacao, p_p_equacao);
+        else return processarParenteses(p_equacao, p_p_equacao);
+    }
+    else{
+        double res = strtod(p_equacao, p_p_equacao);
+        return res;
+    }
    
    
    
 }
 
-double processarParenteses(char *p_equacao){
-   p_equacao++;
-   int paren = 1;
-   int len;
-   double res;
-   for(int i = 0; i < strlen(p_equacao); i++){
-      if(p_equacao[i] == ')') paren--;
-      if(p_equacao[i] == '(') paren++;
-      if(paren == 0) {
-         len = i;
-         break;
-      }
-      char equacao_paren[i+1];
-      memcpy(equacao_paren, p_equacao, len);
-      printf("Equação dentro de parenteses = %s\n", equacao_paren);
-      p_equacao += i;
-      printf("p_equacao após parenteses = %s\n", p_equacao);
-   }
-   return 0;
+double processarParenteses(char *p_equacao, char**p_p_equacao){
+    printf("Processando parênteses\n");
+    int paren = 0;
+    int len;
+    double res;
+    for(int i = 0; i < strlen(p_equacao); i++){
+        if(p_equacao[i] == ')') paren--;
+        if(p_equacao[i] == '(') paren++;
+        if(paren == 0) {
+           len = i+1;
+           break;
+        }
+    }
+    char equacao_paren[len-2+1]; //Excluir parênteses, adicionar caractere de término de string
+    p_equacao++;
+    memcpy(equacao_paren, p_equacao, len-2);
+    equacao_paren[len-2] = '\0';
+    *p_p_equacao += len;
+    return resolverEquacao(equacao_paren);
 }
