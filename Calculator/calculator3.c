@@ -142,6 +142,8 @@ int main()
         //3.4.Parênteses vazio
         err = 0;
         for (int i=0; i < len; i++){
+            //Aponta erro caso os sinais * ou / estejam em posições inválidas (análise de caracteres à esquerda
+            //e à direita do sinal) ou no inicio/fim da entrada
             if((entrada[i] == '*' || entrada[i] == '/') && (!strchr(white_list_multdiv_esquerda,entrada[i-1]) || 
             !strchr(white_list_multdiv_direita,entrada[i+1]) || i == 0 || i == len-1)){
                 printf("Erro: Operação inválida, operação de multiplicação/divisão inválida\n");
@@ -157,7 +159,6 @@ int main()
                 break;
             }
 
-            if(entrada[i] == '.') printf("Verdadeiro\n");
             if(entrada[i] == '.' && (!strchr(white_list_numeros, entrada[i-1]) || !strchr(white_list_numeros, entrada[i+1]))){
                 printf("Erro: Operação inválida, o caractere '.' deve ser antecedido e seguido por um número\n");
                 err = 1;
