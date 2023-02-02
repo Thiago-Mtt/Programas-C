@@ -29,6 +29,7 @@ Algoritmo do programa
 char entrada[MAX_DIG_ENTR+1];
 
 const char white_list[] = "0123456789+-/* ().";
+const char white_list_somasub_direita[] = "0123456789(";
 const char white_list_numeros[] = "0123456789";
 const char white_list_multdiv_esquerda[] = "0123456789)";
 const char white_list_multdiv_direita[] = "0123456789+-(";
@@ -126,7 +127,7 @@ int main()
 
         //3.Operação inválida
         //3.1.Sinais de multiplicação/divisão em posições inválidas
-        //3.2.Sinais de soma/subtração não seguidos de um número
+        //3.2.Sinais de soma/subtração em posições inválidas
         //3.3.Ponto não entre números
         //3.4.Parênteses vazio
         err = 0;
@@ -138,9 +139,9 @@ int main()
                 break;
             }
 
-            //Aponta um erro caso tenham múltiplos sinais de soma/subtração consecutivos
+            //Aponta um erro caso os sinais + ou - não sejam seguidos por um número ou termo em parênteses
             //Entrada deve ser simplificado anteriormente a esta verificação
-            if((entrada[i] == '+' || entrada[i] == '-') && (!strchr(white_list_numeros, entrada[i+1]) || i == (len-1))){
+            if((entrada[i] == '+' || entrada[i] == '-') && (!strchr(white_list_somasub_direita, entrada[i+1]) || i == (len-1))){
                 printf("Erro: Operação inválida, sinal de soma/subtração não seguido de um número\n");
                 err = 1;
                 break;
@@ -211,8 +212,8 @@ double resolverEquacao(char *p_equacao){
          num_vect[iterator] = f_strtod(p_equacao, &p_equacao);
       } 
 
-      //Verifica se o ponteiro aponta para um sinal de multiplicação/divisão. Neste caso, realiza a operação do
-      //valor à direita com o último valor guardado no vetor num_vect, ou seja, o valor à esquerda do sinal.
+      //Verifica se o ponteiro aponta para um sinal de multiplicação/divisão. Neste caso, realiza a operação entre
+      //o valor à direita do sinal com o último valor guardado no vetor num_vect, ou seja, o valor à esquerda do sinal.
       else if(p_equacao[0] == '*' || p_equacao[0] == '/'){
          sinal = p_equacao[0];
          p_equacao++;
@@ -245,6 +246,7 @@ double f_strtod(char *p_equacao, char **p_p_equacao){
     if(p_equacao[0] == '(') return processarParenteses(p_equacao, p_p_equacao);
     else if(p_equacao[1] == '('){
         p_equacao++;
+        *p_p_equacao += 1;
         if(p_equacao[-1] == '-') return -1*processarParenteses(p_equacao, p_p_equacao);
         else return processarParenteses(p_equacao, p_p_equacao);
     }
