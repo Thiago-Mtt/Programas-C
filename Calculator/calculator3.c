@@ -58,14 +58,24 @@ int main()
         }
 
         //2.Remoção de espaço ' '
-        char *p_ponto_de_anexo = entrada;
-        char *p_anexo = entrada;
+        //Detecta se há espaço na entrada, caso sim:
+        //  Posiciona um ponteiro (p_ponto_de_anexo) no primeiro espaço detectado
+        //  Começa a iterar a entrada a partir do primeiro espaço
+        //  Ao detectar algo diferente de um espaço, posiciona outro ponteiro (p_anexo) no inicio do segmento
+        //e adiciona +1 ao tamanho do segmento a cada caractere diferente de espaço
+        //  Ao detectar um outro espaço, ou o fim da entrada, anexa o segmento definido por p_anexo e o tamanho
+        //do anexo à posição do primeiro espaço (apontado por p_ponto_de_anexo). Redefinir p_ponto_de_anexo
+        //para o novo espaço encontrado
+        //  Repetir até alcançar o fim da entrada
+        //Substituição dos caracteres sobrados por null '\0'
+        char *p_ponto_de_anexo;
         p_ponto_de_anexo = (strchr(entrada, ' '));
         if (p_ponto_de_anexo){
-            int tamanho_principal_inicial = len - strlen(p_ponto_de_anexo);
+            char *p_anexo = entrada;
+            int pos_primeiro_espaco = len - strlen(p_ponto_de_anexo); //Tamanho do segmento até o primeiro espaço
             int tamanho_anexo = 0;
-            int anexo = 0;
-            for (int i = tamanho_principal_inicial; i <= len; i++){
+            int anexo = 0; 
+            for (int i = pos_primeiro_espaco; i <= len; i++){
                 if(anexo == 0 && entrada[i] != ' '){
                     anexo = 1;
                     p_anexo = (entrada) + i;
