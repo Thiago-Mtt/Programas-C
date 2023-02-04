@@ -12,11 +12,56 @@ double f_atof(char *string_float){
     while(string_float[0] == ' ' || string_float[0] == '\t'){
         string_float++;
     }
-    double numero_float;
+
+    //Retorna zero caso primeiro caractere diferente de um espaço não seja um número nem um sinal + ou -
+    int continuar = 0;
+    const char white_list[] = "0123456789+-";
+    for (int i = 0; i <= 11; i++){
+        if(white_list[i] == string_float[0]) continuar = 1;
+    }
+    if (!continuar) return 0;
+
+    //Define sinal a ser multiplicado no fim da função
+    int sinal = 1;
+    if(string_float[0] == '+') string_float++; 
+    else if(string_float[0] == '-'){
+        sinal = -1;
+        string_float++;
+    }
+
+    int fracao = 0;
+    double numero_float = 0;
+    double digito_fracao = 0;
+    //Equanto o caractere atual entiver entre '0' e '9' ou for igual a '.' ou ','
+    while((string_float[0] >= 48 && string_float[0] <= 57) || string_float[0] == '.' || string_float[0] == ','){
+        if (string_float[0] == '.' || string_float[0] == ','){
+            if(!fracao) fracao = 1;
+            else break;
+        }
+        else if (string_float[0] >= 48 && string_float[0] <= 57){
+            if(!fracao){
+                numero_float *= 10;
+                numero_float += string_float[0] - 48;
+            }
+            else{
+                digito_fracao = string_float[0] - 48;
+                for(int i = 0; i < fracao; i++){
+                    digito_fracao /= 10;
+                }
+                numero_float += digito_fracao;
+                fracao++;
+            }
+        }
+        string_float++;
+    }
+
+    numero_float *= sinal;
+    return numero_float; 
     
 }
 
 int main (){
+    printf("numero float = %f", f_atof("  -12.312E12"));
     
     return(0);
 }
