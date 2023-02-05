@@ -7,7 +7,7 @@ Tolera espaços antes do número, suporta sinais(+-), aceita ponto ou virgula
 
 #include <stdio.h>
 
-double f_atof(char *string_float){
+double func_atof(char *string_float){
     //Pular caracteres de espaço no início da entrada
     while(string_float[0] == ' ' || string_float[0] == '\t'){
         string_float++;
@@ -29,6 +29,9 @@ double f_atof(char *string_float){
         string_float++;
     }
 
+    //A cada número antes do '.' ou ','(fracao = 0), multiplica o resultado atual e soma o número atual ao resultado
+    //A cada número depois do '.' ou ','(fracao >= 1), divide o número atual por 10 n=fracao vezes,
+    //  soma o número atual ao resultado e incrementa fracao.
     int fracao = 0;
     double numero_float = 0;
     double digito_fracao = 0;
@@ -55,13 +58,14 @@ double f_atof(char *string_float){
         string_float++;
     }
 
+    //Aplicar sinal
     numero_float *= sinal;
     return numero_float; 
     
 }
 
 int main (){
-    printf("numero float = %f", f_atof("  -12.312E12"));
+    printf("numero float = %f", func_atof("  -12.312E12"));
     
     return(0);
 }
