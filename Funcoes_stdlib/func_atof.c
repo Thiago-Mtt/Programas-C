@@ -57,9 +57,7 @@ double func_atof(char *string_float){
             }
             else{
                 digito_fracao = string_float[0] - 48;
-                for(int i = 0; i < fracao; i++){
-                    digito_fracao /= 10;
-                }
+                digito_fracao *= potencia(10, -fracao);
                 numero_float += digito_fracao;
                 fracao++;
             }
@@ -98,6 +96,6 @@ double func_atof(char *string_float){
 
 
 int main (){
-    printf("numero float = %e", func_atof("  -12.3211115E20"));
+    printf("numero float = %f", func_atof("  12.3241"));
     return(0);
 }
