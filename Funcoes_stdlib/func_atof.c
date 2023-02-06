@@ -84,8 +84,16 @@ double func_atof(char *string_float){
     
 }
 
+double potencia(int base, int expoente){
+    if (expoente < 0) return potencia(1/base, -expoente);
+    else if (expoente == 0) return 1;
+    else if (expoente == 1) return base;
+    else if (expoente % 2 == 1) return base*potencia(base*base, (expoente-1)/2);
+    else if (expoente %2 == 0) return potencia(base*base, expoente/2);
+}
+
 int main (){
-    printf("numero float = %f", func_atof("  -12.312E12"));
-    
+    //printf("numero float = %f", func_atof("  -12.312E12"));
+    printf("resultado da funcao = %f", potencia(4, 11));
     return(0);
 }
