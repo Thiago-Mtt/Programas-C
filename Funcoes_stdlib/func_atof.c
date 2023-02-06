@@ -58,6 +58,26 @@ double func_atof(char *string_float){
         string_float++;
     }
 
+    //Caso 'e' ou 'E' esteja no fim do número, indicando notação científica.
+    if(string_float[0] == 'e' || string_float[0] == 'E'){
+        string_float++;
+
+        //Coleta do sinal do expoente
+        int exp_sinal = 1;
+        if(string_float[0] == '+') string_float++; 
+        else if(string_float[0] == '-'){
+            exp_sinal = -1;
+            string_float++;
+        }
+
+        int expoente = 0;
+        while(string_float[0] >= 48 && string_float[0] <= 57){
+            expoente *= 10;
+            expoente += string_float[0] - 48;
+            string_float++;
+        }
+    }
+
     //Aplicar sinal
     numero_float *= sinal;
     return numero_float; 
