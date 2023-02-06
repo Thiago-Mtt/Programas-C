@@ -7,6 +7,15 @@ Tolera espaços antes do número, suporta sinais(+-), aceita ponto ou virgula
 
 #include <stdio.h>
 
+//Binary exponentiation ou Exponentiation by Squaring
+double potencia(double base, int expoente){
+    if (expoente < 0) return potencia(1/base, -expoente);
+    else if (expoente == 0) return 1;
+    else if (expoente == 1) return base;
+    else if (expoente % 2 == 1) return base*potencia(base*base, (expoente-1)/2);
+    else if (expoente % 2 == 0) return potencia(base*base, expoente/2);
+}
+
 double func_atof(char *string_float){
     //Pular caracteres de espaço no início da entrada
     while(string_float[0] == ' ' || string_float[0] == '\t'){
@@ -76,6 +85,9 @@ double func_atof(char *string_float){
             expoente += string_float[0] - 48;
             string_float++;
         }
+
+        expoente *= exp_sinal;
+        numero_float *= potencia(10, expoente);
     }
 
     //Aplicar sinal
@@ -84,16 +96,8 @@ double func_atof(char *string_float){
     
 }
 
-double potencia(int base, int expoente){
-    if (expoente < 0) return potencia(1/base, -expoente);
-    else if (expoente == 0) return 1;
-    else if (expoente == 1) return base;
-    else if (expoente % 2 == 1) return base*potencia(base*base, (expoente-1)/2);
-    else if (expoente %2 == 0) return potencia(base*base, expoente/2);
-}
 
 int main (){
-    //printf("numero float = %f", func_atof("  -12.312E12"));
-    printf("resultado da funcao = %f", potencia(4, 11));
+    printf("numero float = %e", func_atof("  -12.3211115E20"));
     return(0);
 }
