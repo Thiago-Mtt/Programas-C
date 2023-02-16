@@ -6,8 +6,8 @@
 //Para uma diferença, com o caratere das string 1 sendo o maior(valor em ASCII), retorna 1
 //Caso contrario, retorna -1
 int func_memcmp(const void *str1, const void *str2, size_t n){
-    char *p1 = (char*)str1;
-    char *p2 = (char*)str2;
+    const char *p1 = (const char*)str1;
+    const char *p2 = (const char*)str2;
     for (int i; i < n; i++){
         if(*p1 == '\0' && *p2 == '\0') return 0;
         else if(*p1 > *p2) return 1;
