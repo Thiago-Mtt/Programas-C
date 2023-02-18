@@ -1,12 +1,12 @@
 #include <stdio.h>
 
-void *func_memcpy(void *str1, const void *str2, size_t n){
-    unsigned char * p1 = (unsigned char *)str1;
-    const unsigned char * p2 = (const unsigned char *)str2;
+void *func_memcpy(void *dest, const void *src, size_t n){
+    unsigned char * p1 = (unsigned char *)dest;
+    const unsigned char * p2 = (const unsigned char *)src;
     for(;n--;p1++,p2++){
         *p1 = *p2;
     }
-    return str1;
+    return dest;
 }
 
 
