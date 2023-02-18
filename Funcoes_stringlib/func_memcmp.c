@@ -7,23 +7,19 @@
 //Caso contrario, retorna -1
 int func_memcmp(const void *str1, const void *str2, size_t n){
     const unsigned char *p1 = (const unsigned char*)str1;
-    const unsigned char *p2 = (const char*)str2;
-    for (int i; i < n; i++){
-        if(*p1 == '\0' && *p2 == '\0') return 0;
-        else if(*p1 > *p2) return 1;
-        else if(*p1 < *p2) return -1;
-        p1++; p2++;
+    const unsigned char *p2 = (const unsigned char*)str2;
+    for(; n--; p1++, p2++){
+        if(*p1 != *p2) return (int)(*p1 - *p2);
     }
     return 0;
 }
-
 
 int main(){
     char str1[] = "123ABcd";
     char str2[] = "123AbCD";
     int ret;
 
-    ret = func_memcmp(str1, str2, 5);
+    ret = func_memcmp(str1, str2, 4);
 
     if(ret < 0) {
         printf("str1 is less than str2");
