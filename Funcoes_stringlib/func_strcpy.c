@@ -16,8 +16,7 @@ int main(){
     char str1[40];
     char str2[] = "ABC";
 
-    func_strcpy(str1, str2);
-    printf("string 1 = %s", str1);
+    printf("string 1 = %s", func_strcpy(str1, str2));
     
     return 0;
 }
