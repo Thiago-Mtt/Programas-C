@@ -14,16 +14,17 @@ Requisitos
 #include <stdio.h>
 #include <stdlib.h>
 
-int lerLista(FILE *fp_lista);
+int lerLista(FILE **fp_lista);
 
 #define CLEAR "cls"
+#define MAX_TAMANHO_TAREFA 30
 
 int main(){
     
+    FILE *fp_lista;
     while(1){
         system(CLEAR);
 
-        FILE *fp_lista;
         if(!(fp_lista = fopen("lista.txt", "r"))){
             fp_lista = fopen("lista.txt", "w");
             printf("Novo arquivo de lista criado\n");
@@ -31,9 +32,12 @@ int main(){
             fp_lista = fopen("lista.txt", "r");
         }
 
-        if(!lerLista(fp_lista)){
-            printf("\n Erro ao tenta ler lista");
+        printf("Lista:\n");
+        if(!lerLista(&fp_lista)){
+            printf("Erro ao tenta ler lista\n");
         }
+
+        fclose(fp_lista);
 
 
 
@@ -47,11 +51,17 @@ int main(){
 }
 
 
-int lerLista(FILE *fp_lista){
-    if(!feof(fp_lista)){
+int lerLista(FILE **fp_lista){
+    if(feof(*fp_lista)){
         printf("\nNenhuma tarefa na lista\n");
         return 1;
     }
 
-    return 0;
+    char tarefa[MAX_TAMANHO_TAREFA];
+    while(!feof(*fp_lista)){
+        fgets(tarefa, MAX_TAMANHO_TAREFA, *fp_lista);
+        printf("%s", tarefa);
+    }
+
+    return 1;
 }
