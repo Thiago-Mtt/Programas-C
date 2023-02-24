@@ -58,9 +58,9 @@ int lerLista(FILE **fp_lista){
     }
 
     char tarefa[MAX_TAMANHO_TAREFA];
-    while(!feof(*fp_lista)){
+    for(int i = 1;!feof(*fp_lista); i++){
         fgets(tarefa, MAX_TAMANHO_TAREFA, *fp_lista);
-        printf("%s", tarefa);
+        printf("%d. %s", i,tarefa);
     }
 
     return 1;
