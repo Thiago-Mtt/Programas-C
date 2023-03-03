@@ -26,8 +26,10 @@ list uncheck
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int lerLista();
+char * getComando(char * comando, const char * entrada);
 
 #define CLEAR "cls"
 #define MAX_TAMANHO_TAREFA 30
@@ -38,9 +40,9 @@ enum lista{all, check, uncheck} lista_atual;
 
 int main(){
     
-    system(CLEAR);
+    //system(CLEAR);
 
-    //Cria a lista caso nao exista
+    //Cria a lista caso nao exista, não verifica erro em caso de falha
     FILE *fp_lista;
     if(!(fp_lista = fopen( LISTA, "r"))){
         fp_lista = fopen( LISTA, "w");
@@ -53,10 +55,23 @@ int main(){
         printf("Erro ao tenta ler lista\n");
     }
 
+    //Loop de comando
+    char entrada[MAX_TAMANHO_COMANDO];
     char comando[MAX_TAMANHO_COMANDO];
+    char * param;
     while(1){
+        //Limpar arrays de entrada e comando de lixo e entradas antigas
+        memset(entrada, '\0', MAX_TAMANHO_COMANDO);
+        memset(comando, '\0', MAX_TAMANHO_COMANDO);
+
         printf("\n>");
-        fgets(comando, MAX_TAMANHO_COMANDO, stdin);
+        fgets(entrada, MAX_TAMANHO_COMANDO, stdin);
+        //Remover caracter de nova linhha no final da entrada
+        if(entrada[strlen(entrada)-1] == '\n') entrada[strlen(entrada)-1] = '\0';
+
+        param = getComando(comando, entrada);
+        printf("Comando = %s\n", comando);
+        printf("param = %s\n", param);
 
     }
 
@@ -83,4 +98,30 @@ int lerLista(){
     lista_atual = all;
 
     return 1;
+}
+
+//Copia a primeira palavra(o comando) na entrada para o array 'comando'
+//Retorna um ponteiro apontando para a primeira letra da segunda palavra (o(s) parametro(s))
+//Caso nao tenha parametro, retorna NULL
+char * getComando(char * comando, const char * entrada){
+    
+    //Pula espaço em branco no inicio da entrada
+    while(*entrada == ' '){
+        entrada++;
+    }
+
+    int len_comando = strcspn(entrada, " ");
+    memcpy(comando, entrada, len_comando);
+
+    //Aponta para o primeiro espaço após a primeira palavra ou para o caracter de fim de string
+    entrada += len_comando;
+
+    //Pula espaço em branco após primeira palavra
+    while(*entrada == ' '){
+        entrada++;
+    }
+
+    if(entrada) return (char*)entrada;
+    else return NULL;
+
 }
