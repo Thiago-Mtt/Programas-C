@@ -27,16 +27,21 @@ list uncheck
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-int lerLista();
-char * getComando(char * comando, const char * entrada);
+#include "todolist.h"
 
 #define CLEAR "cls"
 #define MAX_TAMANHO_TAREFA 30
 #define MAX_TAMANHO_COMANDO 40
 #define LISTA "lista.txt"
 
-enum lista{all, check, uncheck} lista_atual;
+
+//lista_atual mantem registrada qual foi a ultima lista apresentada na tela, a fim de selecionar um item especifico
+//dessa lista
+enum list_state{all, check, uncheck} lista_atual;
+
+
+//Vetor de ponteiros para funções de comandos
+void (*comVect[])(char * param) = {COMANDOS};
 
 int main(){
     
@@ -51,9 +56,7 @@ int main(){
     fclose(fp_lista);
 
     //Ler lista
-    if(!lerLista()){
-        printf("Erro ao tenta ler lista\n");
-    }
+    lerListaAll();
 
     //Loop de comando
     char entrada[MAX_TAMANHO_COMANDO];
@@ -80,25 +83,6 @@ int main(){
     return 0;
 }
 
-//Print da lista de tarefas
-//Tarefas são enumeradas a fim de auxiliar seleção de tarefa
-int lerLista(){
-    FILE *fp_lista = fopen(LISTA, "r");
-    if(feof(fp_lista)){
-        printf("\nNenhuma tarefa na lista\n");
-        return 1;
-    }
-
-    printf("Lista:\n");
-    char tarefa[MAX_TAMANHO_TAREFA];
-    for(int i = 1;!feof(fp_lista); i++){
-        fgets(tarefa, MAX_TAMANHO_TAREFA, fp_lista);
-        printf("%d. %s", i,tarefa);
-    }
-    lista_atual = all;
-
-    return 1;
-}
 
 //Copia a primeira palavra(o comando) na entrada para o array 'comando'
 //Retorna um ponteiro apontando para a primeira letra da segunda palavra (o(s) parametro(s))
@@ -124,4 +108,45 @@ char * getComando(char * comando, const char * entrada){
     if(entrada) return (char*)entrada;
     else return NULL;
 
+}
+
+void comList(char * param){
+    if (param == NULL) lerListaAll();
+}
+
+
+//Print da lista de tarefas;
+//Tarefas são enumeradas a fim de auxiliar seleção de tarefa
+void lerListaAll(){
+    FILE *fp_lista = fopen(LISTA, "r");
+    if(feof(fp_lista)){
+        printf("\nNenhuma tarefa na lista\n");
+        return;
+    }
+
+    printf("Lista:\n");
+    char tarefa[MAX_TAMANHO_TAREFA];
+    for(int i = 1;!feof(fp_lista); i++){
+        fgets(tarefa, MAX_TAMANHO_TAREFA, fp_lista);
+        printf("%d. %s", i,tarefa);
+    }
+    
+    lista_atual = all;
+
+}
+
+void comAdd(char * param){
+
+}
+
+void comDel(char * param){
+    
+}
+
+void comCheck(char * param){
+    
+}
+
+void comUncheck(char * param){
+    
 }
