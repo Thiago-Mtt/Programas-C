@@ -29,11 +29,6 @@ list uncheck
 #include <string.h>
 #include "todolist.h"
 
-#define CLEAR "cls"
-#define MAX_TAMANHO_TAREFA 30
-#define MAX_TAMANHO_COMANDO 40
-#define LISTA "lista.txt"
-
 
 //lista_atual mantem registrada qual foi a ultima lista apresentada na tela, a fim de selecionar um item especifico
 //dessa lista
@@ -41,9 +36,12 @@ enum list_state{all, check, uncheck} lista_atual;
 
 
 //Vetor de ponteiros para funções de comandos
+#define X(comando) func_##comando ,
+//'COMANDOS' termina com um ','
 void (*comVect[])(char * param) = {COMANDOS};
+#undef X
 
-int main(){
+int main() {
     
     //system(CLEAR);
 
@@ -55,8 +53,8 @@ int main(){
     }
     fclose(fp_lista);
 
-    //Ler lista
-    lerListaAll();
+    //Ler lista completa
+    ler_lista_all();
 
     //Loop de comando
     char entrada[MAX_TAMANHO_COMANDO];
@@ -72,7 +70,9 @@ int main(){
         //Remover caracter de nova linhha no final da entrada
         if(entrada[strlen(entrada)-1] == '\n') entrada[strlen(entrada)-1] = '\0';
 
-        param = getComando(comando, entrada);
+        //param recebe um ponteiro apontando para o primeiro caractere da segunda palavra da entrada (inicio
+        //do parâmetro)
+        param = get_comando(comando, entrada);
         printf("Comando = %s\n", comando);
         printf("param = %s\n", param);
 
@@ -87,7 +87,7 @@ int main(){
 //Copia a primeira palavra(o comando) na entrada para o array 'comando'
 //Retorna um ponteiro apontando para a primeira letra da segunda palavra (o(s) parametro(s))
 //Caso nao tenha parametro, retorna NULL
-char * getComando(char * comando, const char * entrada){
+char * get_comando(char * comando, const char * entrada){
     
     //Pula espaço em branco no inicio da entrada
     while(*entrada == ' '){
@@ -110,14 +110,14 @@ char * getComando(char * comando, const char * entrada){
 
 }
 
-void comList(char * param){
-    if (param == NULL) lerListaAll();
+void func_list(char * param){
+    if (param == NULL) ler_lista_all();
 }
 
 
 //Print da lista de tarefas;
 //Tarefas são enumeradas a fim de auxiliar seleção de tarefa
-void lerListaAll(){
+void ler_lista_all(){
     FILE *fp_lista = fopen(LISTA, "r");
     if(feof(fp_lista)){
         printf("\nNenhuma tarefa na lista\n");
@@ -135,18 +135,18 @@ void lerListaAll(){
 
 }
 
-void comAdd(char * param){
-
+void func_add(char * param){
+    return;
 }
 
-void comDel(char * param){
-    
+void func_del(char * param){
+    return;
 }
 
-void comCheck(char * param){
-    
+void func_check(char * param){
+    return;
 }
 
-void comUncheck(char * param){
-    
+void func_uncheck(char * param){
+    return;
 }
