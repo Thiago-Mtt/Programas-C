@@ -32,14 +32,26 @@ list uncheck
 
 //lista_atual mantem registrada qual foi a ultima lista apresentada na tela, a fim de selecionar um item especifico
 //dessa lista
-enum list_state{all, check, uncheck} lista_atual;
+enum list_state{l_all, l_check, l_uncheck} lista_atual;
+
+//Definição do tipo en_comando, codificação dos comandos
+#define X(comando, COMANDO) COMANDO ,
+typedef enum {
+    COMANDO_TABLE
+    NRO_COMANDOS, EN_ERR=-1
+} en_comando;
+#undef X
+
+//Retorna o valor correpondente do identificador do enum passado como string
+en_comando str_to_en_comando(const char * str);
 
 
 //Vetor de ponteiros para funções de comandos
-#define X(comando) func_##comando ,
-//'COMANDOS' termina com um ','
-void (*comVect[])(char * param) = {COMANDOS};
+#define X(comando, COMANDO) comando ,
+//'COMANDOS_MAP' termina com um ','
+void (*comVect[])(char * param) = {COMANDO_TABLE};
 #undef X
+
 
 int main() {
     
@@ -73,8 +85,14 @@ int main() {
         //param recebe um ponteiro apontando para o primeiro caractere da segunda palavra da entrada (inicio
         //do parâmetro)
         param = get_comando(comando, entrada);
-        printf("Comando = %s\n", comando);
-        printf("param = %s\n", param);
+
+        en_comando comando_index = str_to_en_comando(comando);
+        if (comando_index == EN_ERR){
+            printf("Comando não reconhecido\n");
+            continue;
+        }
+        (*comVect[comando_index])(param);
+        
 
     }
 
@@ -110,7 +128,8 @@ char * get_comando(char * comando, const char * entrada){
 
 }
 
-void func_list(char * param){
+void list(char * param){
+    printf("Comando list alcançado\n");
     if (param == NULL) ler_lista_all();
 }
 
@@ -131,22 +150,33 @@ void ler_lista_all(){
         printf("%d. %s", i,tarefa);
     }
     
-    lista_atual = all;
+    lista_atual = l_all;
 
 }
 
-void func_add(char * param){
+#define X(comando, COMANDO) if(strcmp(str, #comando) == 0) return COMANDO ;
+en_comando str_to_en_comando(const char * str){
+    COMANDO_TABLE
+    return EN_ERR;
+}
+#undef X
+
+void add(char * param){
+    printf("Comando add alcançado\n");
     return;
 }
 
-void func_del(char * param){
+void del(char * param){
+    printf("Comando del alcançado\n");
     return;
 }
 
-void func_check(char * param){
+void check(char * param){
+    printf("Comando check alcançado\n");
     return;
 }
 
-void func_uncheck(char * param){
+void uncheck(char * param){
+    printf("Comando uncheck alcançado\n");
     return;
 }

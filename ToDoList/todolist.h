@@ -6,16 +6,18 @@
 #define MAX_TAMANHO_COMANDO 40
 #define LISTA "lista.txt"
 
-#define COMANDOS \
-    X(list)\
-    X(add)\
-    X(del)\
-    X(check)\
-    X(uncheck)
+//minusculo para funções, maiusculo para enum
+#define COMANDO_TABLE \
+    X(list, LIST)\
+    X(add, ADD)\
+    X(del, DEL)\
+    X(check, CHECK)\
+    X(uncheck, UNCHECK)
+
 
 //Declaração das funções dos respectivos comandos
-#define X(comando) void func_##comando(char * param);
-COMANDOS
+#define X(comando, COMANDO) void comando(char * param);
+COMANDO_TABLE
 #undef X
 
 //Copia a primeira palavra(o comando) na entrada para o array 'comando'
@@ -26,5 +28,7 @@ char * get_comando(char * comando, const char * entrada);
 //Abre arquivo LISTA e emite no terminal as tarefas em cada linha
 //Tarefas são enumeradas a fim de auxiliar seleção de tarefa
 void ler_lista_all();
+
+
 
 #endif
