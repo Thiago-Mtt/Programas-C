@@ -2,3 +2,4 @@
 [ ] Varrer
 [ ] Fazer compras
 [ ] Trabalhar em projeto
+[ ] Comprar peixe

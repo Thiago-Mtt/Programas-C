@@ -34,21 +34,12 @@ list uncheck
 //dessa lista
 enum list_state{l_all, l_check, l_uncheck} lista_atual;
 
-//Definição do tipo en_comando, codificação dos comandos
-#define X(comando, COMANDO) COMANDO ,
-typedef enum {
-    COMANDO_TABLE
-    NRO_COMANDOS, EN_ERR=-1
-} en_comando;
-#undef X
 
-//Retorna o valor correpondente do identificador do enum passado como string
-en_comando str_to_en_comando(const char * str);
 
 
 //Vetor de ponteiros para funções de comandos
 #define X(comando, COMANDO) comando ,
-//'COMANDOS_MAP' termina com um ','
+//'COMANDOS_TABLE' termina com um ','
 void (*comVect[])(char * param) = {COMANDO_TABLE};
 #undef X
 
@@ -104,7 +95,7 @@ int main() {
 
 //Copia a primeira palavra(o comando) na entrada para o array 'comando'
 //Retorna um ponteiro apontando para a primeira letra da segunda palavra (o(s) parametro(s))
-//Caso nao tenha parametro, retorna NULL
+//Caso nao tenha uma segunda palavra na entrada (o parametro), retorna NULL
 char * get_comando(char * comando, const char * entrada){
     
     //Pula espaço em branco no inicio da entrada
@@ -118,7 +109,7 @@ char * get_comando(char * comando, const char * entrada){
     //Aponta para o primeiro espaço após a primeira palavra ou para o caracter de fim de string
     entrada += len_comando;
 
-    //Pula espaço em branco após primeira palavra
+    //Pula espaço em branco após primeira palavra, agora aponta para início da segunda palavra, se houver
     while(*entrada == ' '){
         entrada++;
     }
@@ -130,7 +121,7 @@ char * get_comando(char * comando, const char * entrada){
 
 void list(char * param){
     printf("Comando list alcançado\n");
-    if (param == NULL) ler_lista_all();
+    if (*param == '\0') ler_lista_all();
 }
 
 
@@ -149,6 +140,8 @@ void ler_lista_all(){
         fgets(tarefa, MAX_TAMANHO_TAREFA, fp_lista);
         printf("%d. %s", i,tarefa);
     }
+    printf("\n");
+    fclose(fp_lista);
     
     lista_atual = l_all;
 
@@ -163,6 +156,13 @@ en_comando str_to_en_comando(const char * str){
 
 void add(char * param){
     printf("Comando add alcançado\n");
+    FILE *fp_lista = fopen(LISTA, "a");
+    fputs("\n[ ] ",fp_lista);
+    fputs(param, fp_lista);
+    fclose(fp_lista);
+
+    ler_lista_all();
+
     return;
 }
 
