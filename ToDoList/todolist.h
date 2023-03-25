@@ -1,5 +1,5 @@
-#ifndef todolist_HEADER
-#define todolist_HEADER
+#ifndef _todolist_HEADER
+#define _todolist_HEADER
 
 #define CLEAR "cls"             // Comando do sistema operacional para limpar o prompt de comando
 #define MAX_TAMANHO_TAREFA 30   // Numero máximo de caracteres em uma linha na lista de tarefas 
@@ -10,7 +10,10 @@
 #define PARAM_ALL "all"         // Parametro passado com comandos para indicar seleção de todos os itens da lista
 
 // Enumeração utilizada para codificar qual lista foi apresentada ao usuário por último
+// lista_atual mantem registrada qual foi a ultima lista apresentada na tela
+// A atualização dessa variável deve ser implementada dentro de funções que apresentem uma lista no terminal
 typedef enum {l_all, l_check, l_uncheck} list_state;
+extern list_state lista_atual;
 
 // X Macro. Guarda os comandos reconhecidos pelo programa, utilizada para automatizar declaração das funções, codificação
 //  dos comandos e facilitar adição de um novo comando
@@ -54,9 +57,5 @@ void ler_lista_all();
 // Caso ocorra uma falha (Ex: o número passado é 8 mas a lista só tem 6 linhas), retorna -1
 fpos_t get_tarefa           (int linha, list_state lista_atual);
 
-// Redirecionamento da função get_tarefa após identificar a lista atual
-fpos_t get_tarefa_l_all     (int linha);
-fpos_t get_tarefa_l_check   (int linha);
-fpos_t get_tarefa_l_uncheck (int linha);
 
 #endif //todolist_HEADER
