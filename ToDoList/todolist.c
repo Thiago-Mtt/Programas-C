@@ -49,14 +49,15 @@ int main() {
     }
     fclose(fp_lista);
 
-    // Ler lista completa
-    ler_lista_all();
+    //Ler opção de lista atual (inicialmente lista completa)
+    list(PARAM_LIST_ALL);
 
     // Loop de comando
     char entrada[MAX_TAMANHO_COMANDO];
     char comando[MAX_TAMANHO_COMANDO];
     char * param;
     while(1){
+
         // Limpar arrays de entrada e comando de lixo e entradas antigas
         memset(entrada, '\0', MAX_TAMANHO_COMANDO);
         memset(comando, '\0', MAX_TAMANHO_COMANDO);

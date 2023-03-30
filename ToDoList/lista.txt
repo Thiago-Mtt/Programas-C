@@ -1,5 +1,8 @@
-[ ] Lavar louça
-[ ] Varrer
+[X] Lavar louça
+[X] Varrer
 [ ] Fazer compras
-[ ] Trabalhar em projeto
+[X] Trabalhar em projeto
 [ ] Comprar peixe
+[ ] Abrir jornal
+[ ] Ler jornal
+[ ] Fazer cruzadas

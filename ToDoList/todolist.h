@@ -1,19 +1,25 @@
 #ifndef _todolist_HEADER
 #define _todolist_HEADER
 
-#define CLEAR "cls"             // Comando do sistema operacional para limpar o prompt de comando
-#define MAX_TAMANHO_TAREFA 30   // Numero máximo de caracteres em uma linha na lista de tarefas 
-#define MAX_TAMANHO_COMANDO 40  // Máximo de caracteres recebidos como entrada
-#define LISTA "lista.txt"       // Nome do arquivo onde se implementa a lista
-#define CHECKMARK 'X'           // Caracter utilizado para marcar tarefa como cumprida
-#define UNCHECKMARK ' '           // Caracter utilizado para marcar tarefa como não cumprida
-#define PARAM_ALL "all"         // Parametro passado com comandos para indicar seleção de todos os itens da lista
+#define CLEAR                   "cls"          // Comando do sistema operacional para limpar o prompt de comando
+#define MAX_TAMANHO_TAREFA      30             // Numero máximo de caracteres em uma linha na lista de tarefas 
+#define MAX_TAMANHO_COMANDO     40             // Máximo de caracteres recebidos como entrada
+#define LISTA                   "lista.txt"    // Nome do arquivo onde se implementa a lista
+
+#define CHECKMARK               'X'            // Caracter utilizado para marcar tarefa como cumprida
+#define UNCHECKMARK             ' '            // Caracter utilizado para marcar tarefa como não cumprida
+#define PARAM_ALL               "all"          // Parametro passado com comandos para indicar seleção de todos os itens da lista
+#define PARAM_LIST_ALL          "all"          // Parametro passado com comando 'list' para mostrar lista completa
+#define PARAM_LIST_CHECK        "check"        // Parametro passado com comando 'list' para mostrar somente tarefas marcadas
+#define PARAM_LIST_UNCHECK      "uncheck"      // Parametro passado com comando 'list' para mostrar somente tarefas não marcadas
 
 // Enumeração utilizada para codificar qual lista foi apresentada ao usuário por último
 // lista_atual mantem registrada qual foi a ultima lista apresentada na tela
 // A atualização dessa variável deve ser implementada dentro de funções que apresentem uma lista no terminal
 typedef enum {l_all, l_check, l_uncheck} list_state;
 extern list_state lista_atual;
+
+//----------------------------------------------------------------------------------------------------------------
 
 // X Macro. Guarda os comandos reconhecidos pelo programa, utilizada para automatizar declaração das funções, codificação
 //  dos comandos e facilitar adição de um novo comando
@@ -40,6 +46,8 @@ typedef enum {
 } en_comando;
 # undef X
 
+//----------------------------------------------------------------------------------------------------------------
+
 // Retorna o valor codificado do comando passado como string
 en_comando str_to_en_comando(const char * str);
 
@@ -48,9 +56,16 @@ en_comando str_to_en_comando(const char * str);
 // Caso nao tenha parametro, retorna NULL
 char * get_comando(char * comando, const char * entrada);
 
-// Abre arquivo LISTA e emite no terminal as tarefas em cada linha
+//----------------------------------------------------------------------------------------------------------------
+
+// Funções utilizadas pela função correspondente ao comando 'list' 
+// Opções de lista completa, só marcadas ou só não marcadas
 // Tarefas são enumeradas a fim de auxiliar seleção de tarefa para operaçãos como 'check' e 'del'
 void ler_lista_all();
+void ler_lista_check();
+void ler_lista_uncheck();
+
+//----------------------------------------------------------------------------------------------------------------
 
 // Retorna a posição do início da linha requerida pelo usuário mediante o parâmetro 'linha'
 // A linha requerida depende da lista sendo apresentada
