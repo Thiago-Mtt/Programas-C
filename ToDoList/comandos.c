@@ -25,9 +25,7 @@ void list(char * param)
 
 
 void ler_lista_all()
-{
-
-    lista_atual = l_all;   
+{   
     
     FILE *fp_lista = fopen(LISTA, "r");
     if(feof(fp_lista)){
@@ -35,6 +33,8 @@ void ler_lista_all()
         fclose(fp_lista);
         return;
     }
+
+    lista_atual = l_all;
 
     char tarefa[MAX_TAMANHO_TAREFA];
 
@@ -51,13 +51,14 @@ void ler_lista_all()
 
 void ler_lista_check()
 {
-    lista_atual = l_check;
 
     if (get_tarefa(1, l_check) == -1)
     {
         printf("\nNenhuma tarefa marcada na lista\n");
         return;
     }
+
+    lista_atual = l_check;
 
     FILE *fp_lista = fopen(LISTA, "r");
     char tarefa[MAX_TAMANHO_TAREFA];
@@ -88,6 +89,40 @@ void ler_lista_check()
 
 void ler_lista_uncheck()
 {
+
+    if (get_tarefa(1, l_uncheck) == -1)
+    {
+        printf("\nNenhuma tarefa nao marcada na lista\n");
+        return;
+    }
+
+    lista_atual = l_uncheck;
+
+    FILE *fp_lista = fopen(LISTA, "r");
+    char tarefa[MAX_TAMANHO_TAREFA];
+    fpos_t linha_tarefa_nao_marcada;
+
+    printf("Lista:\n");
+    for(int i = 1; ; i++)
+    {
+        linha_tarefa_nao_marcada = get_tarefa(i, l_uncheck);
+        if (linha_tarefa_nao_marcada == -1)
+        {
+            break;
+        }
+
+        fsetpos(fp_lista, &linha_tarefa_nao_marcada);
+
+        if(!fgets(tarefa, MAX_TAMANHO_TAREFA, fp_lista))
+        {
+            break;
+        }
+
+        printf("%d. %s", i,tarefa);
+        }
+
+    printf("\n");
+    fclose(fp_lista);
 
 }
 

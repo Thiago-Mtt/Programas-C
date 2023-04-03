@@ -1,7 +1,7 @@
-[X] Lavar louça
-[X] Varrer
+[ ] Lavar louça
+[ ] Varrer
 [ ] Fazer compras
-[X] Trabalhar em projeto
+[ ] Trabalhar em projeto
 [ ] Comprar peixe
 [ ] Abrir jornal
 [ ] Ler jornal
