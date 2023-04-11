@@ -1,8 +1,4 @@
-[ ] Lavar louça
-[ ] Varrer
-[ ] Fazer compras
-[ ] Trabalhar em projeto
-[ ] Comprar peixe
-[ ] Abrir jornal
-[ ] Ler jornal
-[ ] Fazer cruzadas
+[ ] Tar 1
+[X] Tar 2
+[ ] Tar 5
+[X] Tar 6

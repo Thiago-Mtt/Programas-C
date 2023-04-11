@@ -1,6 +1,8 @@
 #ifndef _todolist_HEADER
 #define _todolist_HEADER
 
+#define WINDOWS
+
 #define CLEAR                   "cls"          // Comando do sistema operacional para limpar o prompt de comando
 #define MAX_TAMANHO_TAREFA      30             // Numero máximo de caracteres em uma linha na lista de tarefas 
 #define MAX_TAMANHO_COMANDO     40             // Máximo de caracteres recebidos como entrada
@@ -12,6 +14,7 @@
 #define PARAM_LIST_ALL          "all"          // Parametro passado com comando 'list' para mostrar lista completa
 #define PARAM_LIST_CHECK        "check"        // Parametro passado com comando 'list' para mostrar somente tarefas marcadas
 #define PARAM_LIST_UNCHECK      "uncheck"      // Parametro passado com comando 'list' para mostrar somente tarefas não marcadas
+#define PARAM_LIST_CUR          "cur"          //  Parametro passado com comando 'list' para mostrar lista atual
 
 // Enumeração utilizada para codificar qual lista foi apresentada ao usuário por último
 // lista_atual mantem registrada qual foi a ultima lista apresentada na tela

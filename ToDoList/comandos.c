@@ -3,6 +3,10 @@
 #include <string.h>
 #include "todolist.h"
 
+#ifdef WINDOWS
+#include <io.h>
+#endif
+
 list_state lista_atual = l_all;         // Estado inicial da lista como completa
 
 //----------------------------------------------------------------------------------------------------------------
@@ -16,6 +20,25 @@ void list(char * param)
     if          (*param == '\0' || strcmp(param, PARAM_LIST_ALL) == 0 )     ler_lista_all();
     else if     (strcmp(param, PARAM_LIST_CHECK) == 0 )                     ler_lista_check();
     else if     (strcmp(param, PARAM_LIST_UNCHECK) == 0)                    ler_lista_uncheck();
+    
+    else if     (strcmp(param, PARAM_LIST_CUR) == 0)
+    {   
+        switch (lista_atual)
+        {
+            case l_all:
+                ler_lista_all();
+                break;
+            case l_check:
+                ler_lista_check();
+                break;
+            case l_uncheck:
+                ler_lista_uncheck();
+                break;
+            default:
+                printf("Erro em list(char * param): param == PARAM_LIST_CUR\n");
+                break;
+        }
+    }
     
     else
     {
@@ -41,7 +64,10 @@ void ler_lista_all()
     printf("Lista:\n");
     for(int i = 1; ; i++)
     {
-        if(!fgets(tarefa, MAX_TAMANHO_TAREFA, fp_lista)) break;
+        if(!fgets(tarefa, MAX_TAMANHO_TAREFA, fp_lista))
+        {
+            break;
+        }
         printf("%d. %s", i,tarefa);
     }
     printf("\n");
@@ -157,7 +183,62 @@ void add(char * param){
 
 void del(char * param)
 {
+    // Sobreescreve a linha a ser apagada com as linhas seguintes
+    // Espaço restante após sobreinscrição é truncado
+    // Somente compatível com Windows no momento
+
     printf("Comando del alcançado\n");
+
+    FILE *fp_lista = fopen(LISTA, "r+");
+
+    fpos_t read_pos, write_pos;
+    write_pos = get_tarefa(atoi(param), lista_atual);
+    printf("write_pos = %ld\n", (long int ) write_pos);
+    if(write_pos == -1)
+    {
+        printf("Linha selecionada não existe\n");
+        fclose(fp_lista);
+        return;
+    }
+
+    fsetpos(fp_lista, &write_pos);
+
+    char ch;
+    do
+    {   
+        ch = fgetc(fp_lista);
+        
+    } while (ch != '\n' && ch != EOF);
+
+    if ( ferror(fp_lista) != 0)
+    {
+        printf("Erro ao ler linha selecionada\n");
+        fclose(fp_lista);
+        return;
+    }
+
+    fgetpos(fp_lista, &read_pos);
+    while((ch = fgetc(fp_lista)) != EOF)
+    {
+       
+        fgetpos(fp_lista, &read_pos);
+
+        fsetpos(fp_lista, &write_pos);
+        fputc(ch, fp_lista);
+        fgetpos(fp_lista, &write_pos);
+
+        fsetpos(fp_lista, &read_pos);
+
+    }
+
+    #ifdef WINDOWS
+    if (_chsize(_fileno(fp_lista), (long) (write_pos))) printf("Erro") ;
+    #endif
+
+    fclose(fp_lista);
+
+    list(PARAM_LIST_CUR);
+
     return;
 }
 
