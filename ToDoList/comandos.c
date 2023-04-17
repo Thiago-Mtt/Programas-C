@@ -253,7 +253,22 @@ void check(char * param)
     printf("Comando check alcançado\n");
 
     FILE * fp_lista = fopen(LISTA, "r+");
-    fpos_t linha_pos = get_tarefa(atoi(param), lista_atual);
+    fpos_t linha_pos;
+
+    if (strcmp(param, PARAM_ALL) == 0)
+    {
+        for (int linha = 1; (linha_pos = get_tarefa(linha, lista_atual)) != -1; linha++)
+        {
+            fsetpos(fp_lista, &linha_pos);
+            fseek(fp_lista, 1, SEEK_CUR);
+            putc(CHECKMARK, fp_lista);
+            printf("linha = %d\n", linha);
+        }
+        fclose(fp_lista);
+        return;
+    }
+
+    linha_pos = get_tarefa(atoi(param), lista_atual);
 
     if (linha_pos == -1)
     {
@@ -297,6 +312,8 @@ fpos_t get_tarefa(int linha, list_state lista_atual)
             {
                 if (nova_linha)
                 {
+                    if ((read_char = fgetc(fp_lista)) == EOF) break;    // Verificar se é \n da última linha do arquivo
+                    else fseek(fp_lista, -1, SEEK_CUR);
                     count_linha++;
                     if (count_linha == linha) break;
                     nova_linha = 0;
