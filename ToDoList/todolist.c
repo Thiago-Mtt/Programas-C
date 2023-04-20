@@ -39,7 +39,7 @@ void (*comVect[])(char * param) = {COMANDO_TABLE};
 
 int main() {
     
-    //system(CLEAR);
+    system(CLEAR);
 
     // Cria a lista caso nao exista, não verifica erro em caso de falha
     FILE *fp_lista;
@@ -76,8 +76,14 @@ int main() {
             printf("Comando não reconhecido\n");
             continue;
         }
+        
+        system(CLEAR);
         (*comVect[comando_index])(param);
         
+        if (comando_index != LIST)
+        {        
+            list(PARAM_LIST_CUR);
+        }
 
     }
 

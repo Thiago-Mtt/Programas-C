@@ -73,7 +73,13 @@ void ler_lista_uncheck();
 // Retorna a posição do início da linha requerida pelo usuário mediante o parâmetro 'linha'
 // A linha requerida depende da lista sendo apresentada
 // Caso ocorra uma falha (Ex: o número passado é 8 mas a lista só tem 6 linhas), retorna -1
-fpos_t get_tarefa           (int linha, list_state lista_atual);
+fpos_t get_tarefa (int linha, list_state lista_atual);
 
+
+//----------------------------------------------------------------------------------------------------------------
+
+// Função utilizada por comandos como check e uncheck para alterar o estado de uma tarefa na lista
+// Simbolo é inserido entre as chaves '[]' à esquerda da tarefa
+int marcar_tarefa (int linha, char simbolo);
 
 #endif //todolist_HEADER

@@ -15,7 +15,6 @@ void list(char * param)
 {
     // Verifica o parametro passado junto do comando de listar as tarefas
     // Um parâmetro nulo (== '\0'), quando só o comando 'list' é passado, resulta na listagem completa
-    printf("Comando list alcançado\n");
 
     if          (*param == '\0' || strcmp(param, PARAM_LIST_ALL) == 0 )     ler_lista_all();
     else if     (strcmp(param, PARAM_LIST_CHECK) == 0 )                     ler_lista_check();
@@ -166,7 +165,6 @@ en_comando str_to_en_comando(const char * str){
 void add(char * param){
     // Adiciona tarefa (char * param) ao fim da lista, em uma nova linha.
     // Tarefa inicialmente não é marcada
-    printf("Comando add alcançado\n");
 
     FILE *fp_lista = fopen(LISTA, "a");
     fputs("[ ] ",fp_lista);
@@ -186,8 +184,6 @@ void del(char * param)
     // Sobreescreve a linha a ser apagada com as linhas seguintes
     // Espaço restante após sobreinscrição é truncado
     // Somente compatível com Windows no momento
-
-    printf("Comando del alcançado\n");
 
     FILE *fp_lista = fopen(LISTA, "r+");
 
@@ -250,48 +246,83 @@ void check(char * param)
     // A tarefa é selecionada a partir da numeração da última lista apresentada (completa, só marcadas, só não marcadas, etc)
     // 'param' pode ser o número da linha a ser marcada ou 'all' para marcar todas as linhas da última lista apresentada
     
-    printf("Comando check alcançado\n");
-
-    FILE * fp_lista = fopen(LISTA, "r+");
-    fpos_t linha_pos;
 
     if (strcmp(param, PARAM_ALL) == 0)
     {
-        for (int linha = 1; (linha_pos = get_tarefa(linha, lista_atual)) != -1; linha++)
+        int nro_tarefa = 1;
+        while (marcar_tarefa(nro_tarefa,CHECKMARK) != 1)
         {
-            fsetpos(fp_lista, &linha_pos);
-            fseek(fp_lista, 1, SEEK_CUR);
-            putc(CHECKMARK, fp_lista);
-            printf("linha = %d\n", linha);
+            nro_tarefa++;
         }
-        fclose(fp_lista);
+
         return;
     }
 
-    linha_pos = get_tarefa(atoi(param), lista_atual);
+    if (atoi(param) != 0)
+    {
+        if (marcar_tarefa(atoi(param), CHECKMARK) == -1)
+        {
+            printf("Erro: Tarefa não encontrada\n");
+        }
+        return;
+    }
+
+
+    printf ("Erro: Falha na interpretação do parâmetro passado ao comando\n");
+    return;
+}
+
+
+
+void uncheck(char * param)
+{
+
+    if (strcmp(param, PARAM_ALL) == 0)
+    {
+        int nro_tarefa = 1;
+        while (marcar_tarefa(nro_tarefa,UNCHECKMARK) != 1)
+        {
+            nro_tarefa++;
+        }
+
+        return;
+    }
+
+    if (atoi(param) != 0)
+    {
+        if (marcar_tarefa(atoi(param), UNCHECKMARK) == -1)
+        {
+            printf("Erro: Tarefa não encontrada\n");
+        }
+        return;
+    }
+
+
+    printf ("Erro: Falha na interpretação do parâmetro passado ao comando\n");
+    return;
+
+}
+
+int marcar_tarefa(int linha, char simbolo)
+{
+    FILE * fp_lista = fopen(LISTA, "r+");
+    fpos_t linha_pos;
+
+    linha_pos = get_tarefa(linha, lista_atual);
 
     if (linha_pos == -1)
     {
-        printf("Erro: Tarefa não encontrada\n");
-        return;
+        return 1;
     }
 
     fsetpos(fp_lista, &linha_pos);
     fseek(fp_lista, 1, SEEK_CUR);
-    putc(CHECKMARK, fp_lista);
+    putc(simbolo, fp_lista);
+
     fclose(fp_lista);
 
+    return 0;
 
-
-    return;
-}
-
-//----------------------------------------------------------------------------------------------------------------
-
-void uncheck(char * param)
-{
-    printf("Comando uncheck alcançado\n");
-    return;
 }
 
 //----------------------------------------------------------------------------------------------------------------
