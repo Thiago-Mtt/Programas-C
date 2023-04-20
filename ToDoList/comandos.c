@@ -166,13 +166,17 @@ void add(char * param){
     // Adiciona tarefa (char * param) ao fim da lista, em uma nova linha.
     // Tarefa inicialmente não é marcada
 
+    if (!*param)
+    {
+        printf("Erro: tarefa não inserida para adicição à lista\n");
+        return;
+    }
+
     FILE *fp_lista = fopen(LISTA, "a");
     fputs("[ ] ",fp_lista);
     fputs(param, fp_lista);
     fputs("\n",fp_lista);
     fclose(fp_lista);
-
-    ler_lista_all();
 
     return;
 }
@@ -185,11 +189,23 @@ void del(char * param)
     // Espaço restante após sobreinscrição é truncado
     // Somente compatível com Windows no momento
 
+    if (strcmp(param, PARAM_ALL) == 0)
+    {
+        FILE *fp_lista = fopen(LISTA, "w");
+        fclose(fp_lista);
+        return;
+    }
+
+    if (atoi(param) == 0)
+    {
+        printf("Erro: Parâmetro inexistente ou inválido\n");
+        return;
+    }
+    
     FILE *fp_lista = fopen(LISTA, "r+");
 
     fpos_t read_pos, write_pos;
     write_pos = get_tarefa(atoi(param), lista_atual);
-    printf("write_pos = %ld\n", (long int ) write_pos);
     if(write_pos == -1)
     {
         printf("Linha selecionada não existe\n");
@@ -232,8 +248,6 @@ void del(char * param)
     #endif
 
     fclose(fp_lista);
-
-    list(PARAM_LIST_CUR);
 
     return;
 }

@@ -1,5 +1,2 @@
 [ ] Tar 1
-[X] Tar 3
-[X] Tar 4
 [ ] Tar 2
-[ ] Tar 11
