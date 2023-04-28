@@ -108,6 +108,8 @@ void put_celebridade()
 
 int algorit()
 {
+    // Retorna o indice da celebridade na matriz [0, N-1]
+    // Retorna -1 caso celebridade não exista
     int celeb = 0;
     for (int i = 1; i < N; i++)
     {
@@ -144,8 +146,8 @@ int main()
 
     if ((f_rand() % 2) == 1)
     {
-        printf("Celebridade inserida\n");
         put_celebridade();
+        printf("Celebridade inserida\n");
     }
     else printf("Sem celebridade\n");
 

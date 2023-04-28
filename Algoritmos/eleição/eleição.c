@@ -31,8 +31,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define N 100
-#define M 5
+#define N 100       // Numero de votos
+#define M 5         // Numero de candidatos
 #define VENCENDOR_GARANTIDO 0
 
 int (*f_rand)();            // Ponteiro da função rand() para ser utilizado em todas as funções
@@ -64,7 +64,8 @@ void init_votos()
     // Retorna 0 caso votos sejam distribuidos aleatoriamente
     // Retorna 1 caso tenha garantia de que um candidato ganha por maioria
     // Para garantir um candidato vencedor, alteram-se votos aleatórios de outros candidatos
-    //      pelo do vencedor até que este possua a maioria dos votos
+    //  pelo do vencedor até que este possua a maioria dos votos
+    //  Este método não cobre vitórias por grande maioria
     
     // Iniciar vetor com zero votos para cada candidato
     for (int i = 0; i < M; i++)
